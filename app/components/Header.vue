@@ -1,5 +1,5 @@
 <template>
-  <header class="container header px-4 px-md-0">
+  <header id="header" class="container header px-4 px-md-0">
     <div class="row justify-content-between align-items-center">
       <div class="col-lg-2 col-6">
         <NuxtLink to="/" class="logo-link">
@@ -23,8 +23,9 @@
         </nav>
       </div>
       <div class="col-lg-2 d-none d-lg-block">
-        <div class="form-control search-block">
+        <form class="form-control search-block" @submit.prevent="handleSearch">
           <input
+            v-model="searchQuery"
             type="text"
             class="form-control"
             placeholder="Search"
@@ -33,15 +34,15 @@
           />
           <button
             class="btn btn-outline-secondary"
-            type="button"
+            type="submit"
             id="button-addon2"
           >
             <img src="/images/search.png" alt="search" />
           </button>
-        </div>
+        </form>
       </div>
       <div class="col-lg-2 col-6 d-flex justify-content-end">
-        <button class="button button-cart">
+        <button class="button button-cart" @click="openCart()">
           <img class="button-icon" src="/images/cart.svg" alt="icon: cart" />
           <span class="button-text">Cart</span>
           <span class="button-text cart-count"></span>
@@ -53,6 +54,18 @@
 </template>
 
 <script setup>
+const viewCart = useViewCart();
+const searchQuery = ref("");
+
+const handleSearch = () => {
+  navigateTo({
+    path: "/products",
+    query: {
+      search: searchQuery.value || undefined,
+    },
+  });
+};
+
 let links = ref([
   {
     id: 0,
@@ -91,4 +104,8 @@ let links = ref([
     text: "All",
   },
 ]);
+
+const openCart = () => {
+  viewCart.value = true;
+};
 </script>

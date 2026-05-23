@@ -4,4 +4,6 @@
   <slot />
 
   <Footer />
+
+  <Cart />
 </template>

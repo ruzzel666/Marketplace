@@ -1,5 +1,0 @@
-<template>
-  <Header />
-
-  <slot />
-</template>

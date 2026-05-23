@@ -1,6 +1,12 @@
 <template>
-  <section class="slider swiper-container">
-    <div class="swiper-wrapper">
+  <section class="slider swiper-container" style="overflow: hidden">
+    <div
+      class="swiper-wrapper"
+      :style="{
+        transform: `translateX(-${currentSlide * 100}%)`,
+        transition: 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
+      }"
+    >
       <section class="slide slide-1 swiper-slide">
         <div class="container">
           <div class="row">
@@ -22,7 +28,7 @@
         </div>
         <!-- /.container -->
       </section>
-      <section class="slide slide-1 swiper-slide">
+      <section class="slide slide-2 swiper-slide">
         <div class="container">
           <div class="row">
             <div class="col-lg-4 col-10 offset-lg-1">
@@ -43,7 +49,7 @@
         </div>
         <!-- /.container -->
       </section>
-      <section class="slide slide-1 swiper-slide">
+      <section class="slide slide-3 swiper-slide">
         <div class="container">
           <div class="row">
             <div class="col-lg-4 col-10 offset-lg-1">
@@ -70,13 +76,13 @@
       <div class="container">
         <div class="row justify-content-between">
           <div class="col-1">
-            <button class="slider-button slider-button-prev">
+            <button class="slider-button slider-button-prev" @click="prevSlide">
               <img src="/images/arrow-prev.svg" alt="icon: arrow-prev" />
             </button>
           </div>
           <!-- /.col-1 -->
           <div class="col-1">
-            <button class="slider-button slider-button-next">
+            <button class="slider-button slider-button-next" @click="nextSlide">
               <img src="/images/arrow-next.svg" alt="icon: arrow-prev" />
             </button>
           </div>
@@ -89,7 +95,7 @@
     <!-- /.slider-nav -->
   </section>
   <!-- /.slider -->
-  <section class="special-offers container pt-5 pb-4">
+  <section id="special-offers" class="special-offers container pt-5 pb-4">
     <div class="row mb-4">
       <div class="col-xl-6">
         <div class="card card-1 mb-4">
@@ -158,7 +164,7 @@
       <!-- /.col-3 -->
     </div>
     <!-- /.row -->
-    <div class="row align-items-center mb-4">
+    <div class="row align-items-center mb-4" id="new-arrival">
       <div class="col-9">
         <h2 class="section-title">New Arrival</h2>
       </div>
@@ -176,14 +182,17 @@
     <div class="short-goods row">
       <div class="col-lg-3 col-sm-6" v-for="card in data" :key="card.id">
         <div class="goods-card">
-          <span class="label">{{ card.label.toUpperCase() }}</span>
+          <span class="label">{{ titleFormat(card.label) }}</span>
           <img :src="card.img" alt="image: Hoodie" class="goods-image" />
           <h3 class="goods-title">{{ card.name }}</h3>
 
           <p class="goods-description">{{ card.description }}</p>
 
-          <button class="button goods-card-btn add-to-cart" data-id="012">
-            <span class="button-price">{{ card.price }}$</span>
+          <button
+            class="button goods-card-btn add-to-cart"
+            @click="addToCart(card)"
+          >
+            <span class="button-price">${{ card.price }}</span>
           </button>
         </div>
       </div>
@@ -191,6 +200,40 @@
   </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { ref } from "vue";
+import type { CartItem } from "~/models/cart-item.model";
+import type { Product } from "~/models/products.models";
+
 const { data } = await useFetch("/api/new-products");
+
+const cartItems = useCart();
+
+const currentSlide = ref(0);
+const totalSlides = 3;
+
+const nextSlide = () => {
+  currentSlide.value = (currentSlide.value + 1) % totalSlides;
+};
+
+const prevSlide = () => {
+  currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides;
+};
+
+const addToCart = (product: Product) => {
+  const findItem = cartItems.value.find((c) => c.id === product.id);
+
+  if (findItem) {
+    findItem.count++;
+  } else {
+    const newCartItem: CartItem = {
+      id: product.id,
+      name: product.name,
+      price: parseInt(product.price),
+      count: 1,
+    };
+
+    cartItems.value.push(newCartItem);
+  }
+};
 </script>

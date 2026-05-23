@@ -1,27 +1,27 @@
 <template>
-  <footer class="footer">
+  <footer id="footer" class="footer">
     <div class="container">
       <div class="row">
         <div class="col-xl-7 mb-4 mb-xl-0">
           <nav>
             <ul class="footer-menu d-sm-flex">
               <li class="footer-menu-item">
-                <a href="#" class="footer-menu-link">Shop</a>
+                <NuxtLink to="/products" class="footer-menu-link">Shop</NuxtLink>
               </li>
               <li class="footer-menu-item">
-                <a href="#" class="footer-menu-link">About Us</a>
+                <NuxtLink to="/#special-offers" class="footer-menu-link">About Us</NuxtLink>
               </li>
               <li class="footer-menu-item">
-                <a href="#" class="footer-menu-link">Careers</a>
+                <NuxtLink to="/#new-arrival" class="footer-menu-link">Careers</NuxtLink>
               </li>
               <li class="footer-menu-item">
-                <a href="#" class="footer-menu-link">FAQ </a>
+                <NuxtLink to="/#special-offers" class="footer-menu-link">FAQ</NuxtLink>
               </li>
               <li class="footer-menu-item">
-                <a href="#" class="footer-menu-link">Blog</a>
+                <NuxtLink to="/#new-arrival" class="footer-menu-link">Blog</NuxtLink>
               </li>
               <li class="footer-menu-item">
-                <a href="#" class="footer-menu-link">Contacts</a>
+                <NuxtLink to="/#footer" class="footer-menu-link">Contacts</NuxtLink>
               </li>
             </ul>
           </nav>
@@ -73,7 +73,8 @@
         <!-- /.col-4 -->
         <div class="col-lg-2 col-sm-1 d-flex justify-content-end">
           <a
-            href="#body"
+            href="#"
+            @click="scrollToTop"
             class="scroll-link top-link d-flex align-items-center"
           >
             <span class="top-link-text">Top</span>
@@ -87,3 +88,13 @@
     <!-- /.container -->
   </footer>
 </template>
+
+<script setup lang="ts">
+const scrollToTop = (event: Event) => {
+  event.preventDefault();
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+};
+</script>

@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -97,7 +101,13 @@ button {
 }
 
 .slide-2 {
-    background: #b9e0b4 url('/images/slide-image-1.png') no-repeat top right 30%;
+    background: #E5E9E5 url('/images/slide-image-2.png') no-repeat top right 30%;
+    background-size: contain;
+}
+
+.slide-3 {
+    background: #E5DCE9 url('/images/slide-image-3.png') no-repeat top right 30%;
+    background-size: contain;
 }
 
 .label {
@@ -521,7 +531,9 @@ button {
 
 
 @media (max-width: 1200px) {
-    .slide-1 {
+    .slide-1,
+    .slide-2,
+    .slide-3 {
         background-size: cover;
     }
 
