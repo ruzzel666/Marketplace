@@ -7,7 +7,7 @@
         transition: 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
       }"
     >
-      <section class="slide slide-1 swiper-slide">
+      <section class="slide slide-1 swiper-slide" :style="{ backgroundImage: `url(${getImageUrl('/images/slide-image-1.png')})` }">
         <div class="container">
           <div class="row">
             <div class="col-lg-4 col-10 offset-lg-1">
@@ -28,7 +28,7 @@
         </div>
         <!-- /.container -->
       </section>
-      <section class="slide slide-2 swiper-slide">
+      <section class="slide slide-2 swiper-slide" :style="{ backgroundImage: `url(${getImageUrl('/images/slide-image-2.png')})` }">
         <div class="container">
           <div class="row">
             <div class="col-lg-4 col-10 offset-lg-1">
@@ -49,7 +49,7 @@
         </div>
         <!-- /.container -->
       </section>
-      <section class="slide slide-3 swiper-slide">
+      <section class="slide slide-3 swiper-slide" :style="{ backgroundImage: `url(${getImageUrl('/images/slide-image-3.png')})` }">
         <div class="container">
           <div class="row">
             <div class="col-lg-4 col-10 offset-lg-1">
@@ -77,13 +77,13 @@
         <div class="row justify-content-between">
           <div class="col-1">
             <button class="slider-button slider-button-prev" @click="prevSlide">
-              <img src="/images/arrow-prev.svg" alt="icon: arrow-prev" />
+              <img :src="getImageUrl('/images/arrow-prev.svg')" alt="icon: arrow-prev" />
             </button>
           </div>
           <!-- /.col-1 -->
           <div class="col-1">
             <button class="slider-button slider-button-next" @click="nextSlide">
-              <img src="/images/arrow-next.svg" alt="icon: arrow-prev" />
+              <img :src="getImageUrl('/images/arrow-next.svg')" alt="icon: arrow-prev" />
             </button>
           </div>
           <!-- /.col-1 -->
@@ -106,7 +106,7 @@
           <button class="button">
             <span class="button-text">View all</span>
             <img
-              src="/images/arrow.svg"
+              :src="getImageUrl('/images/arrow.svg')"
               alt="icon: arrow"
               class="button-icon"
             />
@@ -126,7 +126,7 @@
           <button class="button">
             <span class="button-text">View all</span>
             <img
-              src="/images/arrow.svg"
+              :src="getImageUrl('/images/arrow.svg')"
               alt="icon: arrow"
               class="button-icon"
             />
@@ -183,7 +183,7 @@
       <div class="col-lg-3 col-sm-6" v-for="card in data" :key="card.id">
         <div class="goods-card">
           <span class="label">{{ titleFormat(card.label) }}</span>
-          <img :src="card.img" alt="image: Hoodie" class="goods-image" />
+          <img :src="getImageUrl(card.img)" alt="image: Hoodie" class="goods-image" />
           <h3 class="goods-title">{{ card.name }}</h3>
 
           <p class="goods-description">{{ card.description }}</p>
@@ -205,7 +205,13 @@ import { ref } from "vue";
 import type { CartItem } from "~/models/cart-item.model";
 import type { Product } from "~/models/products.models";
 
-const { data } = await useFetch("/api/new-products");
+const { data } = await useAsyncData("new-products", async () => {
+  const products = await $fetch<Product[]>(
+    "https://marketplace-afea8-default-rtdb.firebaseio.com/db.json"
+  );
+  if (!products) return [];
+  return products.filter((c) => c.label && c.label.toLowerCase() === "new").slice(0, 4);
+});
 
 const cartItems = useCart();
 

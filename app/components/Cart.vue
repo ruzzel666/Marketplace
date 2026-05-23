@@ -133,18 +133,29 @@ const submitOrder = async () => {
 
   isSubmitting.value = true;
   try {
-    const response = await $fetch("/api/order", {
-      method: "POST",
-      body: {
-        name: customerName.value,
-        phone: customerPhone.value,
-        items: cart.value,
-        total: total.value,
-      },
-    });
+    const order = {
+      customerName: customerName.value,
+      customerPhone: customerPhone.value,
+      items: cart.value.map((item) => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        count: item.count,
+      })),
+      total: total.value,
+      createdAt: new Date().toISOString(),
+    };
 
-    if (response.success) {
-      alert(`Заказ успешно оформлен! ID заказа: ${response.orderId}`);
+    const response = await $fetch<any>(
+      "https://marketplace-afea8-default-rtdb.firebaseio.com/orders.json",
+      {
+        method: "POST",
+        body: order,
+      }
+    );
+
+    if (response && response.name) {
+      alert(`Заказ успешно оформлен! ID заказа: ${response.name}`);
       cart.value = [];
       customerName.value = "";
       customerPhone.value = "";

@@ -31,13 +31,13 @@
           <span class="footer-text">Follow Us</span>
           <span class="footer-social d-inline-flex align-items-center">
             <a href="#" class="social-link">
-              <img src="/images/Facebook.svg" alt="Facebook" />
+              <img :src="getImageUrl('/images/Facebook.svg')" alt="Facebook" />
             </a>
             <a href="#" class="social-link">
-              <img src="/images/Twitter.svg" alt="Twitter" />
+              <img :src="getImageUrl('/images/Twitter.svg')" alt="Twitter" />
             </a>
             <a href="#" class="social-link">
-              <img src="/images/Instagram.svg" alt="Instagram" />
+              <img :src="getImageUrl('/images/Instagram.svg')" alt="Instagram" />
             </a>
           </span>
         </div>
@@ -53,20 +53,20 @@
       <hr class="footer-line mt-4 mb-4" />
       <div class="row justify-content-between">
         <div class="col-lg-4 col-sm-9">
-          <img class="payment-logo" src="/images/visa.png" alt="visa logo" />
+          <img class="payment-logo" :src="getImageUrl('/images/visa.png')" alt="visa logo" />
           <img
             class="payment-logo"
-            src="/images/master-card.png"
+            :src="getImageUrl('/images/master-card.png')"
             alt="master card logo"
           />
           <img
             class="payment-logo"
-            src="/images/paypal.png"
+            :src="getImageUrl('/images/paypal.png')"
             alt="paypal logo "
           />
           <img
             class="payment-logo"
-            src="/images/bitcoin.png"
+            :src="getImageUrl('/images/bitcoin.png')"
             alt="bitcoin logo"
           />
         </div>
@@ -78,7 +78,7 @@
             class="scroll-link top-link d-flex align-items-center"
           >
             <span class="top-link-text">Top</span>
-            <img src="/images/top.svg" alt="icon: arrow top" />
+            <img :src="getImageUrl('/images/top.svg')" alt="icon: arrow top" />
           </a>
         </div>
         <!-- /.col-2 -->

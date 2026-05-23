@@ -8,12 +8,12 @@
         <!-- /.col-12 -->
       </div>
       <div class="row long-goods-list">
-        <div class="col-lg-3 col-sm-6" v-for="card in data" :key="card.id">
+        <div class="col-lg-3 col-sm-6" v-for="card in filteredProducts" :key="card.id">
           <div class="goods-card">
             <span class="label" v-if="card.label">{{
               titleFormat(card.label)
             }}</span>
-            <img :src="card.img" alt="image: Hoodie" class="goods-image" />
+            <img :src="getImageUrl(card.img)" alt="image: Hoodie" class="goods-image" />
             <h3 class="goods-title">{{ card.name }}</h3>
 
             <p class="goods-description">{{ card.description }}</p>
@@ -51,15 +51,43 @@ const pageTitle = computed(() => {
   return "All Products";
 });
 
-const { data } = await useAsyncData(
-  "filtered-products",
-  () => {
-    return $fetch(
-      `/api/filtered-products?field=${field.value}&name=${name.value}&search=${search.value}`,
+const { data: products } = await useAsyncData(
+  "all-products",
+  async () => {
+    return await $fetch<Product[]>(
+      "https://marketplace-afea8-default-rtdb.firebaseio.com/db.json"
     );
-  },
-  { watch: [field, name, search] },
+  }
 );
+
+const filteredProducts = computed(() => {
+  if (!products.value) return [];
+
+  let filtered = products.value;
+
+  if (field.value && name.value) {
+    filtered = filtered.filter((c) => {
+      const val = c[field.value as keyof Product];
+      if (typeof val === "string") {
+        return val.toLowerCase() === (name.value as string).toLowerCase();
+      }
+      return String(val) === name.value;
+    });
+  }
+
+  if (search.value) {
+    const searchLower = (search.value as string).toLowerCase();
+    filtered = filtered.filter((c) => {
+      return (
+        (c.name && c.name.toLowerCase().includes(searchLower)) ||
+        (c.description && c.description.toLowerCase().includes(searchLower)) ||
+        (c.category && c.category.toLowerCase().includes(searchLower))
+      );
+    });
+  }
+
+  return filtered;
+});
 
 const addToCart = (product: Product) => {
   const findItem = cartItems.value.find((c) => c.id === product.id);
